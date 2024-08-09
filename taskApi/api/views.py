@@ -1,16 +1,35 @@
+from django.apps import apps
 from django.db import transaction
-from rest_framework import status, generics
+from rest_framework import generics, status
 from rest_framework.decorators import api_view
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
-from django.apps import apps
 from rest_framework.views import APIView
 
-from taskApi.api.models import AttributeName, Attribute, Product, ProductAttributes, Image, ProductImage, Catalog, \
-    AttributeValue
-from taskApi.api.serializers import AttributeNameSerializer, ProductSerializer, CatalogSerializer, \
-    AttributeValueSerializer, AttributeSerializer, ProductAttributesSerializer, ImageSerializer, ProductImageSerializer, \
-    AttributeSerializerDetail, CatalogSerializerDetail, ProductAttributesSerializerDetail, ProductImageSerializerDetail
+from taskApi.api.models import (
+    Attribute,
+    AttributeName,
+    AttributeValue,
+    Catalog,
+    Image,
+    Product,
+    ProductAttributes,
+    ProductImage,
+)
+from taskApi.api.serializers import (
+    AttributeNameSerializer,
+    AttributeSerializer,
+    AttributeSerializerDetail,
+    AttributeValueSerializer,
+    CatalogSerializer,
+    CatalogSerializerDetail,
+    ImageSerializer,
+    ProductAttributesSerializer,
+    ProductAttributesSerializerDetail,
+    ProductImageSerializer,
+    ProductImageSerializerDetail,
+    ProductSerializer,
+)
 
 
 def get_model_class(model_name: str, detail: bool = False) -> tuple:
@@ -23,14 +42,17 @@ def get_model_class(model_name: str, detail: bool = False) -> tuple:
     :return:
     """
     model_classes = {
-        'AttributeName': (AttributeName, AttributeNameSerializer),
-        'AttributeValue': (AttributeValue, AttributeValueSerializer),
-        'Attribute': (Attribute, AttributeSerializerDetail if detail else AttributeSerializer),
-        'Product': (Product, ProductSerializer),
-        'ProductAttributes': (ProductAttributes, ProductAttributesSerializerDetail if detail else ProductAttributesSerializer),
-        'Image': (Image, ImageSerializer),
-        'ProductImage': (ProductImage, ProductImageSerializerDetail if detail else ProductImageSerializer),
-        'Catalog': (Catalog, CatalogSerializerDetail if detail else CatalogSerializer),
+        "AttributeName": (AttributeName, AttributeNameSerializer),
+        "AttributeValue": (AttributeValue, AttributeValueSerializer),
+        "Attribute": (Attribute, AttributeSerializerDetail if detail else AttributeSerializer),
+        "Product": (Product, ProductSerializer),
+        "ProductAttributes": (
+            ProductAttributes,
+            ProductAttributesSerializerDetail if detail else ProductAttributesSerializer,
+        ),
+        "Image": (Image, ImageSerializer),
+        "ProductImage": (ProductImage, ProductImageSerializerDetail if detail else ProductImageSerializer),
+        "Catalog": (Catalog, CatalogSerializerDetail if detail else CatalogSerializer),
     }
     if model_name in model_classes:
         return model_classes[model_name]
@@ -38,7 +60,7 @@ def get_model_class(model_name: str, detail: bool = False) -> tuple:
     raise ValidationError(detail=f"No model class found with name: {model_name}")
 
 
-@api_view(['POST'])
+@api_view(["POST"])
 def import_data(request):
     data = request.data
 
@@ -70,18 +92,18 @@ def import_data(request):
 
 class ModelListView(generics.ListAPIView):
     def get_queryset(self):
-        model_name = self.kwargs['model_name']
+        model_name = self.kwargs["model_name"]
         try:
-            model = apps.get_model('api', model_name)
+            model = apps.get_model("api", model_name)
             return model.objects.all()
         except LookupError:
             return []
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
-        model, serializer_class = get_model_class(self.kwargs['model_name'])
+        model, serializer_class = get_model_class(self.kwargs["model_name"])
         if serializer_class is None:
-            return Response({'error': 'Invalid model name'}, status=400)
+            return Response({"error": "Invalid model name"}, status=400)
         serializer = serializer_class(queryset, many=True)
 
         return Response(serializer.data)

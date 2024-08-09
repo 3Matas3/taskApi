@@ -12,7 +12,7 @@ class AttributeName(models.Model):
 
     class Meta:
         managed = True
-        db_table = 'attribute_name'
+        db_table = "attribute_name"
 
 
 class AttributeValue(models.Model):
@@ -24,7 +24,7 @@ class AttributeValue(models.Model):
 
     class Meta:
         managed = True
-        db_table = 'attribute_value'
+        db_table = "attribute_value"
 
 
 class Attribute(models.Model):
@@ -34,7 +34,7 @@ class Attribute(models.Model):
 
     class Meta:
         managed = True
-        db_table = 'attribute'
+        db_table = "attribute"
 
 
 class Product(models.Model):
@@ -51,7 +51,7 @@ class Product(models.Model):
 
     class Meta:
         managed = True
-        db_table = 'product'
+        db_table = "product"
 
 
 class ProductAttributes(models.Model):
@@ -64,7 +64,7 @@ class ProductAttributes(models.Model):
 
     class Meta:
         managed = True
-        db_table = 'product_attributes'
+        db_table = "product_attributes"
 
 
 class Image(models.Model):
@@ -77,7 +77,7 @@ class Image(models.Model):
 
     class Meta:
         managed = True
-        db_table = 'image'
+        db_table = "image"
 
 
 class ProductImage(models.Model):
@@ -91,7 +91,7 @@ class ProductImage(models.Model):
 
     class Meta:
         managed = True
-        db_table = 'product_image'
+        db_table = "product_image"
 
 
 class Catalog(models.Model):
@@ -106,4 +106,4 @@ class Catalog(models.Model):
 
     class Meta:
         managed = True
-        db_table = 'catalog'
+        db_table = "catalog"
